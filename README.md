@@ -1,10 +1,15 @@
-# api_final
+# api_yamdb
 ### Описание
-Блог для тех кто хочет высказать свое мнение, но через api.
+Блог, где Вы можете оценить фильмы, музыку, 
+книги и многое другое. 
+У нас Вы сможете подобрать произведения определенного жанра. 
+Узнать, как его оценило сообщество. Оставить свою собственную рецензию, 
+а также комментировать чужие отзывы. Теперь в api!
 ### Технологии
 - Python 3.7
 - Django 2.2.16
 - Djangorestframework 3.12.4
+- Djangorestframework-simplejwt 4.7.2
 - Google
 ### Запуск проекта в dev-режиме
 - Установите и активируйте виртуальное окружение
@@ -16,54 +21,78 @@ pip install -r requirements.txt
 ```
 python manage.py runserver
 ```
+### Загрузка тестовых данных в BD
+- В файле конфигурации проекта задать путь к папке с данными
+```
+По умолчанию
+DATA_DIR = os.path.join(BASE_DIR, 'static/data/')
+```
+- В папке с файлом manage.py выполните команду:
+```
+python manage.py loadcsv
+```
 ### Примеры запросов
-- GET /api/v1/posts/?offset=300&limit=100",
-> <font color="green">200</font>
+- POST /api/v1/auth/token/
 ```json
 {
-  "count": 123,
-  "next": "http://api.example.org/accounts/?offset=400&limit=100",
-  "previous": "http://api.example.org/accounts/?offset=200&limit=100",
-  "results": [
-    {
-      "id": 0,
-      "author": "string",
-      "text": "string",
-      "pub_date": "2021-10-14T20:41:29.648Z",
-      "image": "string",
-      "group": 0
-    }
-  ]
+  "username": "string",
+  "confirmation_code": "string"
 }
 ```
-- POST /api/v1/follow/
+> <font color="blue">200</font>
 ```json
 {
-  "following": "string"
+  "token": "string"
+}
+```
+- GET api/v1/titles/
+> <font color="green">200</font>
+```json
+[
+  {
+    "count": 0,
+    "next": "string",
+    "previous": "string",
+    "results": [
+      {
+        "id": 0,
+        "name": "string",
+        "year": 0,
+        "rating": 0,
+        "description": "string",
+        "genre": [
+          {
+            "name": "string",
+            "slug": "string"
+          }
+        ],
+        "category": {
+          "name": "string",
+          "slug": "string"
+        }
+      }
+    ]
+  }
+]
+```
+- POST api/v1/titles/{title_id}/reviews/
+```json
+{
+  "text": "string",
+  "score": 1
 }
 ```
 > <font color="blue">201</font>
 ```json
 {
-"user": "string",
-"following": "string"
-}
-```
-- PUT /api/v1/posts/{post_id}/comments/{id}/
-```json
-{
-  "text": "string"
-}
-```
-> <font color="pink">200</font>
-```json
-{
   "id": 0,
-  "author": "string",
   "text": "string",
-  "created": "2022-05-24T14:15:22Z",
-  "post": 0
+  "author": "string",
+  "score": 1,
+  "pub_date": "2019-08-24T14:15:22Z"
 }
 ```
 ### Авторы
-Митрошин Алексей
+- Толпегин Денис
+- Антон Пеньков 
+- Митрошин Алексей

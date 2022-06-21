@@ -1,7 +1,7 @@
 import os
 from datetime import timedelta
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -22,8 +22,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'users.apps.UsersConfig',
-    'titles.apps.TitlesConfig',
+    'reviews.apps.TitlesConfig',
     'api.apps.ApiConfig',
+    'service.apps.ServiceConfig',
 ]
 
 MIDDLEWARE = [
@@ -57,14 +58,12 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'api_yamdb.wsgi.application'
 
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -81,7 +80,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'ru-ru'
 
 TIME_ZONE = 'UTC'
@@ -92,10 +90,10 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static/'),)
+DATA_DIR = os.path.join(BASE_DIR, 'static/data/')
 
 EMAIL_BACKEND = 'django.core.mail.backends.filebased.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, 'sent_emails')
@@ -111,7 +109,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.PageNumberPagination',
-        'PAGE_SIZE': 100
+    'PAGE_SIZE': 100
 
 }
 
@@ -120,9 +118,16 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=999),
     'AUTH_HEADER_TYPES': ('Bearer',),
 }
-
+USER = 'user'
+ADMIN = 'admin'
+MODERATOR = 'moderator'
 USERS_ROLE = (
-    ('user', 'user'),
-    ('moderator', 'moderator'),
-    ('admin', 'admin'),
+    (USER, 'user'),
+    (ADMIN, 'moderator'),
+    (MODERATOR, 'admin'),
+)
+
+REVIEW_SCORE = (
+    (1, 1), (2, 2), (3, 3), (4, 4), (5, 5),
+    (6, 6), (7, 7), (8, 8), (9, 9), (10, 10)
 )

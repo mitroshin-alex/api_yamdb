@@ -1,11 +1,12 @@
-from django.contrib.auth.models import (AbstractUser,
-                                        PermissionsMixin,
-                                        BaseUserManager)
-from django.db import models
 from django.conf import settings
+from django.contrib.auth.models import (AbstractUser, BaseUserManager,
+                                        PermissionsMixin)
+from django.db import models
 
 
 class UserManager(BaseUserManager):
+    """Custom user manager."""
+
     def create_user(self, email, username, first_name='', last_name='', bio='',
                     role='user', password=None):
         if email is None:
@@ -25,7 +26,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, username,  first_name='', last_name='',
+    def create_superuser(self, email, username, first_name='', last_name='',
                          bio='', role='admin', password=None):
         if password is None:
             raise ValueError('Users must have password')
@@ -46,6 +47,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser, PermissionsMixin):
+    """Custom user model."""
     role = models.CharField(
         max_length=40,
         choices=settings.USERS_ROLE,
@@ -93,5 +95,14 @@ class User(AbstractUser, PermissionsMixin):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ('email',)
 
+    class Meta:
+        ordering = ['username']
+
     def __str__(self):
         return self.username
+
+    def is_admin(self):
+        return self.role == settings.ADMIN
+
+    def is_moderator(self):
+        return self.role == settings.MODERATOR
